@@ -12,6 +12,7 @@ namespace firstSeason
             Console.WriteLine("为什么TAB后这个方法只出来半个括号( , 为什么 Main 后没有出来提示直接生成Main方法");
             Console.WriteLine("namespace 是项目名称吗, 为什么文件初始化出来后只有一个 Console.WriteLine(\"HelloWorld!\")");
             Console.WriteLine("吐槽 Visual Studio 各类选项卡, 代码提示, 感觉都好小");
+            Console.WriteLine("git commit 到底在哪里啊, IDEA是有设置修改的代码默认都是暂存的(省去了git add .这一步), 找不到 commit 啊, 只有推送, 拉取");
         }
     }
 }
