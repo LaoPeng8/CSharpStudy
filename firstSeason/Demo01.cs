@@ -17,11 +17,12 @@ namespace firstSeason// 命名空间, 默认是项目名称, 应该也是可以�
     ///     <author>PengJiaJun</author>
     ///     <date>2025-10-14 00:02</date>
     /// </remarks>
-    class Demo01
+    public class Demo01
     {
-        static void Main(string[] args)
+        public void Show()
         {
             //Ctrl + k + c 了解即可, 正常的 Ctrl + / , Ctrl + Shift + / 也可以用
+            Console.WriteLine("========================Demo01-Start=========================");
             Console.WriteLine("HelloWord!");
             Console.WriteLine("C#学习第一天");
             Console.WriteLine("Visual Studio 快捷键和IDEA还是差很多");
@@ -32,6 +33,7 @@ namespace firstSeason// 命名空间, 默认是项目名称, 应该也是可以�
             Console.WriteLine("找到了 [提交临时数据] 就是的. Ctrl + Entenr");
             Console.WriteLine("每次修改文件后记得 点那个 + 也就是 git add , 不然commit时是上次+时的文件");
             Console.WriteLine("还有一个问题, 解决方案资源管理器, 就是查看项目结构的, 最顶级就是firstSeason也就是这个项目, 那么解决方案下的 .gitignore .readme 文件, 根本找不到");
+            Console.WriteLine("========================Demo01-End=========================");
         }
     }
 }
