@@ -13,10 +13,19 @@ namespace firstSeason
         static void Main(string[] args)
         {
             Demo01 demo01 = new Demo01();
-            demo01.Show();
+            //demo01.Show();
 
             Demo02 demo02 = new Demo02();
-            demo02.Show();
+            //demo02.Show();
+            //demo02.Sum();
+            //demo02.Avg();
+            //demo02.DivideMoney();
+            //demo02.Swap();
+            //demo02.Print();
+            //demo02.SplitInt();
+
+            Demo03 demo03 = new Demo03();
+            demo03.ShowYouth();
         }
     }
 }
