@@ -25,7 +25,13 @@ namespace firstSeason
             //demo02.SplitInt();
 
             Demo03 demo03 = new Demo03();
-            demo03.ShowYouth();
+            //demo03.ShowYouth();
+            //demo03.buyGoods();
+            //demo03.buyGoods2();
+            //demo03.WriteNumber();
+            //demo03.WriteEvenNumber();
+            //demo03.WriteThreeNProblem();
+            demo03.WriteBounce();
         }
     }
 }
