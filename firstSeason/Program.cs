@@ -31,7 +31,12 @@ namespace firstSeason
             //demo03.WriteNumber();
             //demo03.WriteEvenNumber();
             //demo03.WriteThreeNProblem();
-            demo03.WriteBounce();
+            //demo03.WriteBounce();
+            //demo03.WriteGraph();
+
+            Demo04 demo04 = new Demo04();
+            //demo04.testArray();
+            demo04.testString();
         }
     }
 }

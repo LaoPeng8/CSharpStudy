@@ -21,17 +21,22 @@ namespace firstSeason
         sbyte sb = -1;// 1个字节,  -128-127
 
         short sInt = 0;// 2个字节, -32768-32767
+        ushort sShort = 0;// 2个字节, 无符号位
         Int16 sInt16 = 0;// 2个字节, 有符号位
 
         int tInt = 0;// 4个字节
+        uint uTInt = 0;// 4个字节, 无符号位
         Int32 tInt32 = 0;// 4个字节, 有符号位
 
         long lLong = 0;// 8个字节
+        ulong ulLong = 0;// 无符号位
         Int32 lInt32 = 0;// 8个字节, 有符号位
 
+        // float 最多保留7位小数
         float fFloat = 0.0f;// 4个字节
         float fFloat2 = 3.14f;
 
+        // doubule 最多保留16位小数
         double dFloat = 0.0d;// 8个字节 
         double dFloat2 = 3.1415926;
 

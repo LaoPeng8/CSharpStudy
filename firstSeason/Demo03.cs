@@ -227,5 +227,131 @@ namespace firstSeason
         }
 
 
+        public void WriteGraph()
+        {
+            Console.Write("请输入N:");
+            int number = Convert.ToInt16(Console.Read());
+            number = number - '0';
+            Console.WriteLine($"=============={number}==============");
+
+            for(int i = 0; i < number; i++)
+            {
+                for (int j = i; j > 0; j--)
+                {
+                    Console.Write(" ");
+                }
+                Console.WriteLine("*");
+            }
+
+            Console.WriteLine("\n=====================================================\n");
+
+            for (int i = number-1; i >= 0; i--)
+            {
+                for (int j = i; j > 0; j--)
+                {
+                    Console.Write(" ");
+                }
+                Console.WriteLine("*");
+            }
+
+            Console.WriteLine("\n=====================================================\n");
+
+            for(int i = 0; i < number; i++)
+            {
+                for(int z = 0; z < i; z++)
+                {
+                    Console.Write(" ");
+                }
+                for(int j = 0; j < number; j++)
+                {
+                    Console.Write("*");
+                }
+                Console.WriteLine();
+            }
+
+            Console.WriteLine("\n=====================================================\n");
+
+            for(int i = 0; i < number; i++)
+            {
+                for(int j = number - i - 1; j > 0; j--)
+                {
+                    Console.Write(" "); 
+                }
+                for(int z = 0; z < i + 1; z++)
+                {
+                    Console.Write("*");
+                }
+                Console.WriteLine();
+            }
+
+            Console.WriteLine("\n=====================================================\n");
+
+            for(int i = 0; i < number; i++)
+            {
+                for(int j = 0; j < number - i - 1; j++)
+                {
+                    Console.Write(" ");
+                }
+                for(int z = 0; z < i + i + 1; z++)
+                {
+                    Console.Write("*");
+                }
+                for (int j = 0; j < number - i - 1; j++)
+                {
+                    Console.Write(" ");
+                }
+                Console.WriteLine();
+            }
+
+            Console.WriteLine("\n=====================================================\n");
+
+            for (int i = 0; i < number; i++)
+            {
+                for (int j = 0; j < number - i - 1; j++)
+                {
+                    Console.Write(" ");
+                }
+                for (int z = 0; z < i + i + 1; z++)
+                {
+                    Console.Write("*");
+                }
+                for (int j = 0; j < number - i - 1; j++)
+                {
+                    Console.Write(" ");
+                }
+                Console.WriteLine();
+            }
+            for (int i = number-1-1; i >= 0; i--)
+            {
+                for (int j = 0; j < number - i - 1; j++)
+                {
+                    Console.Write(" ");
+                }
+                for (int z = 0; z < i + i + 1; z++)
+                {
+                    Console.Write("*");
+                }
+                for (int j = 0; j < number - i - 1; j++)
+                {
+                    Console.Write(" ");
+                }
+                Console.WriteLine();
+            }
+
+            Console.WriteLine("\n=====================================================\n");
+
+            for(int i = 1; i <= 9; i++)
+            {
+                for(int j=1; j <= i; j++)
+                {
+                    Console.Write($"{j} * {i} = {(i * j).ToString("D2 ")}  ");
+                }
+                Console.WriteLine();
+            }
+
+            Console.WriteLine("\n=====================================================\n");
+        }
+
+
     }
 }
