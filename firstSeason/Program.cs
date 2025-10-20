@@ -36,7 +36,11 @@ namespace firstSeason
 
             Demo04 demo04 = new Demo04();
             //demo04.testArray();
-            demo04.testString();
+            //demo04.testString();
+            //demo04.DrinkCoke();
+            //demo04.CharEncode();
+            //demo04.TestSort();
+            demo04.TestSort2();
         }
     }
 }
