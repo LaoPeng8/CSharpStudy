@@ -40,7 +40,12 @@ namespace firstSeason
             //demo04.DrinkCoke();
             //demo04.CharEncode();
             //demo04.TestSort();
-            demo04.TestSort2();
+            //demo04.TestSort2();
+            //demo04.Operation(OperationType.加, 10, 20, 30, 40, 50);
+            //demo04.TestEnum();
+
+            Demo05 demo05 = new Demo05();
+            demo05.TestStruct();
         }
     }
 }

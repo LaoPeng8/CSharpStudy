@@ -4,8 +4,47 @@ using System.Text;
 
 namespace firstSeason
 {
+    // 枚举
+    enum OperationType
+    {
+        加 = 1,
+        减 = 2,
+        乘 = 3,
+        除 = 4,
+    }
+
+
+    /**
+     * 枚举每一个符号代表一个整数值, 一个比他前面的符号大的整数值.
+     * 默认情况下, 第一个枚举符号的值是 0 (后续依次就是 1,2,3...), 可以修改默认值
+     */
+    enum Week
+    {
+        Sum,// 0
+        Mon,// 1
+        Tue,// 2
+        Wed,// 3
+        Thu,// 4
+        Fri,// 5
+        Sat// 6
+    }
+
+    enum WeekTwo
+    {
+        Sum = 5,// 5
+        Mon,// 6
+        Tue,// 7
+        Wed = 15,// 15
+        Thu,// 16
+        Fri,// 17
+        Sat// 18
+    }
+
     class Demo04
     {
+        // 常量
+        private const double PI = 3.1415926;
+
         public void testArray()
         {
             int[] ageArray = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
@@ -240,6 +279,121 @@ namespace firstSeason
                 array[minIndex] = array[i];
                 array[i] = minValue;
             }
+        }
+
+        /// <summary>
+        /// 参数数组, 相当于形参并不是数组, 而是 int 类型的参数, 但个数不确定
+        /// 参数数组, 只能是形参的最后一个
+        /// </summary>
+        /// <param name="array"></param>
+        public void Operation(OperationType type, params int[] array)
+        {
+            int result = 0;
+            string typeString = "";
+            foreach(int item in array)
+            {
+                if(type == OperationType.加)
+                {
+                    result += item;
+                    typeString = "加";
+                }
+
+                if(type == OperationType.减)
+                {
+                    result -= item;
+                    typeString = "减";
+                }
+
+                if(type == OperationType.乘)
+                {
+                    typeString = "乘";
+                    if (result == 0)
+                    {
+                        result = item;
+                    }
+                    else
+                    {
+                        result *= item;
+                    }
+                }
+
+                if(type == OperationType.除)
+                {
+                    typeString = "除";
+                    if (result == 0)
+                    {
+                        result = item;
+                    }
+                    else
+                    {
+                        result /= item;
+                    }
+                }
+            }
+
+            Console.WriteLine("[" + string.Join(", ", array) + "]");
+            Console.WriteLine($"相{typeString}后的结果为: " + result);
+        }
+
+        public int MaxValue(params int[] array)
+        {
+            int max = int.MinValue;
+            foreach(int item in array)
+            {
+                if(item > max)
+                {
+                    max = item;
+                }
+            }
+
+            return max;
+        }
+
+        /**
+         * 方法的重载
+         * 参数列表必须不同(参数个数不同 或 参数类型不同)
+         * 方法返回值不相关
+         */
+        public double MaxValue(params double[] array)
+        {
+            double max = double.MinValue;
+            foreach (double item in array)
+            {
+                if (item > max)
+                {
+                    max = item;
+                }
+            }
+
+            return max;
+        }
+
+        /**
+         * 递归
+         */
+        public int F(int n)
+        {
+            if(n == 0)
+            {
+                return 2;
+            }
+            if(n == 1)
+            {
+                return 3;
+            }
+
+            return F(n - 1) + F(n - 2);
+        }
+
+        /// <summary>
+        /// 测试枚举
+        /// </summary>
+        public void TestEnum()
+        {
+            int number = (int)WeekTwo.Sum;
+            Console.WriteLine("枚举类型强转int后: "+ number);// 枚举类型强转int后: 5
+            Console.WriteLine("直接打印枚举类型: " + WeekTwo.Sum);// 直接打印枚举类型: Sum
+
         }
     }
 }
