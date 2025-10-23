@@ -45,7 +45,25 @@ namespace firstSeason
             //demo04.TestEnum();
 
             Demo05 demo05 = new Demo05();
-            demo05.TestStruct();
+            //demo05.TestStruct();
+            {
+                Demo05.MyDelegate myDelegate;
+                Console.Write("请一个数字(1 ~ 10): ");
+                int number = Convert.ToInt16(Console.ReadLine());
+
+                if (number > 5)
+                {
+                    myDelegate = demo05.Add;// 给委托方法赋值
+                }
+                else
+                {
+                    myDelegate = demo05.Sub;
+                }
+
+                myDelegate(number, number);// 执行委托方法
+            }
+
         }
+        
     }
 }
