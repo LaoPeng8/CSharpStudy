@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="firstSeason/firstSeason.csproj" />
+  <Project Path="secondSeason/secondSeason.csproj" Id="591d149c-f08e-4f60-87e4-8330da3ef882" />
 </Solution>
