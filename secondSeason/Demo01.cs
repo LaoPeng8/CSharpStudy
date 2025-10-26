@@ -48,6 +48,68 @@ namespace secondSeason
 
     }
 
+    public class Animal
+    {
+        public Animal() { }
+
+        public Animal(int age, int gender, string name)
+        {
+            Age = age;
+            Gender = gender;
+            Name = name;
+        }
+
+        public int Age { get; set; }
+
+        private int Gender { get; set; }// 子类无法访问
+
+        protected string Name { get; set; }// 外界无法访问, 本类和子类可以访问
+
+        public void Cry()
+        {
+            Console.WriteLine("动物在叫....");
+        }
+    }
+
+    // 继承
+    // 和Java一样, 单继承
+    public class Dog:Animal
+    {
+        public Dog() { }
+
+        public Dog(string Speed)
+        {
+            this.Speed = Speed;
+        }
+
+        public Dog(string name, int age, string speed)
+        {
+            base.Name = name;// base 访问父类 等同于Java的super
+            base.Age = age;
+            this.Speed = speed;
+        }
+
+        public string Speed { get; set; }
+
+        public void Go()
+        {
+            Console.WriteLine("子类自己的方法");
+            Console.WriteLine("狗在跑....");
+        }
+
+        public void Show()
+        {
+            Console.WriteLine("Name: " + Name);
+            Console.WriteLine("Age: " + Age);
+            Console.WriteLine("Speed: " + Speed);
+
+            //Console.WriteLine("Gender: " + Gender); 因为 private 访问权限, 子类也访问不了
+        }
+    }
+
+
+
+
     class Demo01
     {
 
@@ -91,6 +153,21 @@ namespace secondSeason
         {
             var a = 4;
             //a = "abc"; // 报错, 匿名类型会在第一次赋值时 是什么类型就是什么类型, 后续不能改
+        }
+
+        public static void TestExtends()
+        {
+            Animal animal = new Animal();
+            animal.Cry();
+
+            Dog dog = new Dog();
+            dog.Cry();// Dog类中并没有定义 Cry() 方法, 是继承自父类的
+        }
+
+        public static void TestExtends2()
+        {
+            Dog dog = new Dog("小黑", 3, "30/km");
+            dog.Show();
         }
     }
 }
