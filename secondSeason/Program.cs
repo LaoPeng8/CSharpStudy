@@ -20,7 +20,11 @@ namespace secondSeason
             //Demo01.TestExtends();
             //Demo01.TestExtends2();
 
-            Demo02.Test01();
+            //Demo02.Test01();
+
+            //Demo03.Test01();
+            //Demo03.Test02();
+            Demo03.Test03();
         }
 
     }
