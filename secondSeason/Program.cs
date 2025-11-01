@@ -31,7 +31,10 @@ namespace secondSeason
             //Demo05.Test01();
             //Demo05.Test02();
 
-            Demo06.Test01();
+            //Demo06.Test01();
+
+            //Demo07.Test01();
+            Demo07.Test02();
         }
 
     }
