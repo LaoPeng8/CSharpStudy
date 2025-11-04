@@ -112,6 +112,7 @@ namespace secondSeason
             T[] targetArray = new T[size];
 
             this.CopyArray(this.array, targetArray);
+            this.array = targetArray;
             this.size = size;
         }
 
@@ -130,6 +131,7 @@ namespace secondSeason
 
             T[] targetArray = new T[size];
             this.CopyArray(this.array, targetArray);
+            this.array = targetArray;
             this.size = size;
         }
 
@@ -187,6 +189,16 @@ namespace secondSeason
         public void AddArray(T[] array)
         {
 
+            if(count + array.Length >= size)
+            {
+                Resize(array.Length);
+            }
+
+            for(int i = 0; i < array.Length; i++)
+            {
+                this.array[count++] = array[i];
+            }
+
         }
 
         /// <summary>
@@ -195,7 +207,15 @@ namespace secondSeason
         /// <param name="array"></param>
         public void AddRange(params T[] array)
         {
+            if (count + array.Length >= size)
+            {
+                Resize(array.Length);
+            }
 
+            for (int i = 0; i < array.Length; i++)
+            {
+                this.array[count++] = array[i];
+            }
         }
 
         /// <summary>
@@ -216,7 +236,7 @@ namespace secondSeason
             {
                 Resize();
             }
-
+            count++;// 从for循环结束后提前到,for循环前++, 保证最后一个元素可以正确遍历, 否则最后一个元素无法正确向后挪动, 因为数组到底了 (而且已经判断了 count + 1 == size 就扩容, 也不会越界)
 
             T nextValue = this.array[index];
             this.array[index] = value;// 将调用者传入的值插入数组
@@ -228,8 +248,6 @@ namespace secondSeason
                 this.array[i] = nextValue;
                 nextValue = temp;
             }
-            count++;
-
         }
 
         /// <summary>
@@ -292,14 +310,99 @@ namespace secondSeason
             return index;
         }
 
-        // 使用委托进行排序
-        public void Sort(Func<T, T, int> comparer)
+
+        /// <summary>
+        /// 使用委托进行排序
+        /// </summary>
+        /// <param name="comparer"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public T[] Sort(Func<T, T, int> comparer)
         {
             if (comparer == null)
             {
                 throw new ArgumentNullException(nameof(comparer));
             }
-            
+
+            // 排序方法不改变原有List结构, 返回排序后的新数组
+            T[] array = new T[this.count];
+            for(int i = 0; i < this.count; i++)
+            {
+                array[i] = this.array[i];
+            }
+
+            quickSort(array, 0, array.Length - 1, comparer);
+            return array;
+        }
+
+        /// <summary>
+        /// 快速排序
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        private static void quickSort(T[] array, int start, int end, Func<T, T, int> comparer)
+        {
+            // 递归退出条件, 左右指针重叠了, 或左指针大于右指针
+            if(start < end)
+            {
+                // 获取本次排序的第一个元素 array[start], 保存本次排序的范围左右指针的值
+                T pivot = array[start];
+                int low = start;
+                int high = end;
+
+                // 本次排序结束条件
+                while(low < high)
+                {
+
+                    // 如果 右边的值(高处的值) >= 中间值, 说明这个值本身就应该在右边(高处)
+                    // high--; 后继续找, 找到一个右边的值(高处的值) 不>= 中间值, 说明这个值不该带在右边(高处), 就将其移至左边(低处)
+                    while(low < high && comparer(array[high], pivot) >= 0)
+                    {
+                        high--;
+                    }
+                    array[low] = array[high];//将高处的值移至低处, 原array[low]的值保存在 pivot中间值里, 当左右指针重叠后, 赋中间值
+
+                    // 如果 低处的值本身就小于 中间值pivot, 那就low++; 直到找到一个值, 这个值大于中间值却在低处, 就把它移动到高处
+                    while(low < high && comparer(array[low], pivot) <= 0)
+                    {
+                        low++;
+                    }
+                    array[high] = array[low];
+
+                }
+                array[low] = pivot;// 本次循环结束后, low与high重叠了, 此处为中间值pivot, 中间值以左(低)的值全部小于中间值, 中间值以右亦然
+
+                // 虽然, 中间值以左全部小于中间值, 中间值以右全部大于中间值, 但是这个区间却仍然是无序的, 所以需要递归处理 中间值左右两个区域, 直到 start >= end 即, 左右各只有一个元素, 已经是有序的
+                quickSort(array, start, low, comparer);
+                quickSort(array, low + 1, end, comparer);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            if(count <= 0)
+            {
+                return "[]";
+            }
+
+            sb.Append("[");
+            for(int i = 0; i < count; i++)
+            {
+                sb.Append(this.array[i]);
+                if(i + 1 < count)
+                {
+                    sb.Append(',');
+                }
+            }
+            sb.Append(']');
+
+            return sb.ToString();
         }
 
 
@@ -315,6 +418,59 @@ namespace secondSeason
             Console.WriteLine(list.Count);
 
             list.Insert(5, 5);
+        }
+
+        public static void Test02()
+        {
+            MyList<int> list = new MyList<int>();
+
+            list.Add(100);
+            list.Add(200);
+            list.Add(300);
+            list.Add(400);
+
+            Console.WriteLine(list.GetCapacity());// 8
+            Console.WriteLine(list.GetCount());// 4
+            Console.WriteLine(list.ToString());// [100,200,300,400]
+            Console.WriteLine("\n==================================\n");
+
+            for (int i = 5; i <= 10; i++)
+            {
+                int value = 100 * i;
+                list.Add(value);
+            }
+
+            Console.WriteLine(list.GetCapacity());// 16
+            Console.WriteLine(list.GetCount());// 10
+            Console.WriteLine(list.ToString());// [100,200,300,400,500,600,700,800,900,1000]
+            Console.WriteLine("\n==================================\n");
+
+            int[] ints = new int[] { 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000 };
+            list.AddArray(ints);
+            Console.WriteLine(list.GetCapacity());// 52 (16 + 10 = 26, 26 > 16, 26 * 2 = 52)
+            Console.WriteLine(list.GetCount());// 20
+            Console.WriteLine(list.ToString());// [100,200,300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000]
+            Console.WriteLine("\n==================================\n");
+
+            list.Insert(15, 1550);
+            list.Insert(7, 88888888);
+            list.Insert(18, 88888888);
+            list.RemoveAt(14);
+            Console.WriteLine(list.GetCapacity());// 52
+            Console.WriteLine(list.GetCount());// 22
+            Console.WriteLine(list.ToString());// [100,200,300,400,500,600,700,88888888,800,900,1000,1100,1200,1300,1500,1550,1600,88888888,1700,1800,1900,0]
+            Console.WriteLine("\n==================================\n");
+
+            Console.WriteLine(list.IndexOf(88888888));// 7
+            Console.WriteLine(list.LastIndexOf(88888888));// 17
+            Console.WriteLine("\n==================================\n");
+
+            int[] ints1 = list.Sort((a, b) => a.CompareTo(b));
+            Console.WriteLine("[" + string.Join(",", ints1) + "]");// [100,200,300,400,500,600,700,800,900,1000,1100,1200,1300,1500,1550,1600,1700,1800,1900,2000,88888888,88888888]
+
+
+            int[] ints2 = list.Sort((a, b) => b.CompareTo(a));
+            Console.WriteLine("[" + string.Join(",", ints2) + "]");// [88888888,88888888,2000,1900,1800,1700,1600,1550,1500,1300,1200,1100,1000,900,800,700,600,500,400,300,200,100]
         }
     }
 }
