@@ -40,7 +40,10 @@ namespace secondSeason
             //Demo08.Test02();
 
             //Demo09.Test01();
-            Demo09.Test02();
+            //Demo09.Test02();
+
+            Thread.CurrentThread.Name = "Main";
+            Demo10.Test01();
         }
 
     }

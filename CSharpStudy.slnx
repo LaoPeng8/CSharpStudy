@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="firstSeason/firstSeason.csproj" />
   <Project Path="secondSeason/secondSeason.csproj" Id="591d149c-f08e-4f60-87e4-8330da3ef882" />
+  <Project Path="thirdlySeasonTankBattle/thirdlySeasonTankBattle.csproj" Id="b53c6939-609b-42d2-ab69-8b13dea38bba" />
 </Solution>
