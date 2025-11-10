@@ -7,6 +7,14 @@ using System.Threading.Tasks;
 
 namespace thirdlySeasonTankBattle.Entity
 {
+    internal enum drawCallType
+    {
+        UP = 0,
+        DOWN = 1,
+        LEFT = 2,
+        RIGHT = 3,
+    }
+
     /// <summary>
     /// 不会移动的物体
     /// </summary>

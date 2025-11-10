@@ -14,32 +14,40 @@ namespace thirdlySeasonTankBattle
     public partial class Main : Form
     {
 
-        private static int sleepTime = 1000 / 60;// 绘制一帧后的等待时间, 控制帧率
+        private int sleepTime = 1000 / 60;// 绘制一帧后的等待时间, 控制帧率
         private Thread gameMainThread = null;
-        private static bool gameIsFinish = false;
+        private bool gameIsFinish = false;
+        private GameFramework gameFramework = new GameFramework();
+        private Bitmap tempBitmap = null;// 临时图片
+        private Graphics mainWindowGraphics = null;// 主窗口画布
 
         public Main()
         {
             InitializeComponent();// 窗口中的一些控件的初始化
             this.StartPosition = FormStartPosition.CenterScreen;
 
-            Graphics graphics = this.CreateGraphics();// 获取到画布
-            GameFramework.graphics = graphics;
+            // 创建一个图片, 转为画布赋值给 GameFramework.graphics, 之后就在这个画布上直接绘制
+            tempBitmap = new Bitmap(450, 450);
+            Graphics bmpGraphics = Graphics.FromImage(tempBitmap);
+            GameFramework.graphics = bmpGraphics;
 
-            // 窗口启动后, 允许游戏的主线程
+            mainWindowGraphics = this.CreateGraphics();// 获取到画布 (获取到本窗口得画布)
+
+            // 窗口启动后, 运行游戏的主线程
             gameMainThread = new Thread(new ThreadStart(GameMainThread));
             gameMainThread.Start();
         }
 
         // 游戏主线程
-        public static void GameMainThread()
+        public void GameMainThread()
         {
-            GameFramework.Start();
+            gameFramework.Start();// 在临时画布上绘制
             while(!gameIsFinish)
             {
                 GameFramework.graphics.Clear(Color.Black);
 
-                GameFramework.Update();
+                gameFramework.Update();// 在临时画布上绘制, 相当于绘制图片
+                mainWindowGraphics.DrawImage(tempBitmap, 0, 0);// 将已经绘制好得图片刷入主画布(将当前帧完全绘制好后,再绘制到主画布, 避免直接在主画布上先绘制墙, 再绘制子弹等, 有先后顺序, 主窗口会闪烁)
                 Thread.Sleep(sleepTime);
             }
         }

@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using thirdlySeasonTankBattle.Manager;
 
 namespace thirdlySeasonTankBattle
 {
@@ -11,14 +12,14 @@ namespace thirdlySeasonTankBattle
     {
 
         public static Graphics graphics;
-
+        private GameObjectManager gameObjectManager = new GameObjectManager();
 
         /// <summary>
         /// 游戏开始时调用一次
         /// </summary>
-        public static void Start()
+        public void Start()
         {
-
+            gameObjectManager.CreateMap();
         }
 
         /// <summary>
@@ -27,9 +28,9 @@ namespace thirdlySeasonTankBattle
         /// 也就是FPS
         /// 60FPS 即一秒调用60次 Update();
         /// </summary>
-        public static void Update()
+        public void Update()
         {
-
+            gameObjectManager.DrawMap();
         }
     }
 }
