@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using thirdlySeasonTankBattle.Entity;
 using thirdlySeasonTankBattle.Properties;
 
@@ -15,23 +16,26 @@ namespace thirdlySeasonTankBattle.Manager
         private List<NotMovething> wallList = new List<NotMovething>();
         private List<NotMovething> steelList = new List<NotMovething>();
         private List<NotMovething> bossList = new List<NotMovething>();
+        private MyTank myTank = null;
 
-        public void DrawMap()
+        public void Update()
         {
-            foreach (var wall in wallList)
+            foreach (var wall in wallList)// 绘制红色墙
             {
-                wall.DrawSelf();
+                wall.Update();
             }
 
-            foreach (var steel in steelList)
+            foreach (var steel in steelList)// 绘制白色墙
             {
-                steel.DrawSelf();
+                steel.Update();
             }
 
-            foreach (var boss in bossList)
+            foreach (var boss in bossList)// 绘制boss坦克
             {
-                boss.DrawSelf();
+                boss.Update();
             }
+
+            myTank.Update();
         }
 
         /// <summary>
@@ -73,6 +77,29 @@ namespace thirdlySeasonTankBattle.Manager
             CreateQuarterWallRow(8, 14, 2, Resources.wall, wallList, drawCallType.LEFT, drawCallType.UP);
 
             CreateQuarterWallRow(7, 14, 1, Resources.Boss, bossList);// 绘制boss
+        }
+
+
+        /// <summary>
+        /// 创建 我的坦克
+        /// </summary>
+        public void CreateMyTank()
+        {
+            int x = 7 * 30;
+            int y = 12 * 30;
+            y += 15;
+
+            myTank = new MyTank(x, y, 2);
+        }
+
+        public void KeyDown(KeyEventArgs args)
+        {
+            myTank.KeyDown(args);
+        }
+
+        public void KeyUp(KeyEventArgs args)
+        {
+            myTank.KeyUp(args);
         }
 
         /// <summary>

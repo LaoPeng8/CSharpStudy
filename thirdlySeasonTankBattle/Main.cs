@@ -68,5 +68,17 @@ namespace thirdlySeasonTankBattle
         {
             gameIsFinish = true;
         }
+
+        // 事件, 窗口内键盘按下后触发
+        private void Main_KeyDown(object sender, KeyEventArgs e)
+        {
+            gameFramework.KeyDown(e);
+        }
+
+        // 事件, 窗口内键盘按下后弹起后触发
+        private void Main_KeyUp(object sender, KeyEventArgs e)
+        {
+            gameFramework.KeyUp(e);
+        }
     }
 }

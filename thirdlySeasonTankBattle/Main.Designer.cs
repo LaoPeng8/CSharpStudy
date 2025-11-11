@@ -38,6 +38,8 @@
             this.Name = "Main";
             this.Text = "坦克大战";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.GameFinish);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Main_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Main_KeyUp);
             this.ResumeLayout(false);
 
         }

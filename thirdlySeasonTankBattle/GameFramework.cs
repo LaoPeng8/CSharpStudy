@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using thirdlySeasonTankBattle.Manager;
 
 namespace thirdlySeasonTankBattle
@@ -20,6 +21,7 @@ namespace thirdlySeasonTankBattle
         public void Start()
         {
             gameObjectManager.CreateMap();
+            gameObjectManager.CreateMyTank();
         }
 
         /// <summary>
@@ -30,7 +32,18 @@ namespace thirdlySeasonTankBattle
         /// </summary>
         public void Update()
         {
-            gameObjectManager.DrawMap();
+            gameObjectManager.Update();
+        }
+
+        public void KeyDown(KeyEventArgs args)
+        {
+            gameObjectManager.KeyDown(args);
+
+        }
+
+        public void KeyUp(KeyEventArgs args)
+        {
+            gameObjectManager.KeyUp(args);
         }
     }
 }

@@ -28,6 +28,11 @@ namespace thirdlySeasonTankBattle.Entity
         /// <returns></returns>
         public abstract Image GetImage();
 
+        public virtual void Update()
+        {
+            DrawSelf();
+        }
+
         public void DrawSelf()
         {
             Graphics graphics = GameFramework.graphics;
