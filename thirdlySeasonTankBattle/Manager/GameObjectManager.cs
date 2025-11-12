@@ -13,10 +13,10 @@ namespace thirdlySeasonTankBattle.Manager
     internal class GameObjectManager
     {
 
-        private List<NotMovething> wallList = new List<NotMovething>();
-        private List<NotMovething> steelList = new List<NotMovething>();
-        private List<NotMovething> bossList = new List<NotMovething>();
-        private MyTank myTank = null;
+        private static List<NotMovething> wallList = new List<NotMovething>();
+        private static List<NotMovething> steelList = new List<NotMovething>();
+        private static List<NotMovething> bossList = new List<NotMovething>();
+        private static MyTank myTank = null;
 
         public void Update()
         {
@@ -267,5 +267,56 @@ namespace thirdlySeasonTankBattle.Manager
             }
         }
 
+        
+        /// <summary>
+        /// MyTank 是否和墙发生了碰撞
+        /// </summary>
+        /// <returns></returns>
+        public static NotMovething IsCollideWall(Rectangle rectangle)
+        {
+            foreach (var wall in wallList)
+            {
+                if (wall.GetRectangle().IntersectsWith(rectangle))
+                {
+                    return wall;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// MyTank 是否和钢铁墙发生了碰撞
+        /// </summary>
+        /// <returns></returns>
+        public static NotMovething IsCollideSteelWall(Rectangle rectangle)
+        {
+            foreach (var steel in steelList)
+            {
+                if (steel.GetRectangle().IntersectsWith(rectangle))
+                {
+                    return steel;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// MyTank 是否和Boss发生了碰撞
+        /// </summary>
+        /// <returns></returns>
+        public static NotMovething IsCollideBossTank(Rectangle rectangle)
+        {
+            foreach (var steel in bossList)
+            {
+                if (steel.GetRectangle().IntersectsWith(rectangle))
+                {
+                    return steel;
+                }
+            }
+
+            return null;
+        }
     }
 }

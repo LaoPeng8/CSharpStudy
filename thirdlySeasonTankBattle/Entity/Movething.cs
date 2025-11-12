@@ -16,7 +16,7 @@ namespace thirdlySeasonTankBattle.Entity
     }
 
     /// <summary>
-    /// 会移动的物体
+    /// 会移动的物体, 构造Movething时, 注意前赋值上下左右的图片, 之后再赋值方向(需保证顺序, 否则设置方向时, 获取的物体的宽高会错误)
     /// </summary>
     internal class Movething : GameObject
     {
@@ -48,7 +48,40 @@ namespace thirdlySeasonTankBattle.Entity
         /// <summary>
         /// 物体的方向
         /// </summary>
-        public Direction Direction { get; set; }
+        private Direction _direction;
+        public Direction Direction {
+            get
+            {
+                return _direction;
+            }
+            set
+            {
+                _direction = value;
+
+                Width = 0;// 默认值
+                Height = 0;
+                if(Direction == Direction.Up && BitmapUp != null)
+                {
+                    Width = BitmapUp.Width;
+                    Height = BitmapUp.Height;
+                }
+                if (Direction == Direction.Down && BitmapDown != null)
+                {
+                    Width = BitmapDown.Width;
+                    Height = BitmapDown.Height;
+                }
+                if (Direction == Direction.Left && BitmapLeft != null)
+                {
+                    Width = BitmapLeft.Width;
+                    Height = BitmapLeft.Height;
+                }
+                if (Direction == Direction.Right && BitmapRight != null)
+                {
+                    Width = BitmapRight.Width;
+                    Height = BitmapRight.Height;
+                }
+            }
+        }
 
         /// <summary>
         /// 实现父类的抽象方法, 获取自身的图片
