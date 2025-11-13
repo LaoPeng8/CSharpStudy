@@ -16,7 +16,12 @@ namespace thirdlySeasonTankBattle.Manager
         private static List<NotMovething> wallList = new List<NotMovething>();
         private static List<NotMovething> steelList = new List<NotMovething>();
         private static List<NotMovething> bossList = new List<NotMovething>();
+        private static List<EnemyTank> enemyTankList = new List<EnemyTank>();
         private static MyTank myTank = null;
+
+        private Point[] points = new Point[3];// 敌方坦克创建的坐标
+        private static int enemyBornSpeed = 60;// 敌方坦克速度
+        private static int enemyBornCount = 60;// 敌方坦克生成计数器, 满60帧生成一个敌方坦克
 
         public void Update()
         {
@@ -35,7 +40,58 @@ namespace thirdlySeasonTankBattle.Manager
                 boss.Update();
             }
 
-            myTank.Update();
+            foreach(var enemyTank in enemyTankList)// 绘制敌方坦克
+            {
+                enemyTank.Update();
+            }
+
+            myTank.Update();// 绘制我的坦克
+
+            CreateEnemyBorn();// 创建敌方坦克, 需要不停的创建, 所以和其他的如创建墙不一样(只需要调用一次)
+        }
+
+        /// <summary>
+        /// 创建敌方坦克坐标
+        /// </summary>
+        public void CreateEnemyBornPoint()
+        {
+            points[0].X = 0;
+            points[0].Y = 0;
+
+            points[1].X = 7 * 30;
+            points[1].Y = 0;
+
+            points[2].X = 14 * 30;
+            points[2].Y = 0;
+        }
+
+        /// <summary>
+        /// 创建敌方坦克
+        /// </summary>
+        private void CreateEnemyBorn()
+        {
+            enemyBornCount++;// 每绘制一次(一帧) 计数器+1, 计算器大于速度后, 生成敌方坦克
+            if(enemyBornCount < enemyBornSpeed)
+            {
+                return;
+            }
+
+            // 从指定坦克坐标中随机获取一个坐标
+            int index = new Random().Next(0, 3);
+            Point position = points[index];
+
+            // 从指定坦克类型中随机获取一个坦克类型
+            int indexType = new Random().Next(0, 5);
+            EnumEnemyTankType enumEnemyTankType = (EnumEnemyTankType)Enum.ToObject(typeof(EnumEnemyTankType), indexType);
+            CreateEnemyTank(position.X, position.Y, enumEnemyTankType);
+
+            enemyBornCount = 0;
+        }
+
+        private static void CreateEnemyTank(int x, int y, EnumEnemyTankType enumEnemyTankType)
+        {
+            EnemyTank tank = new EnemyTank(x, y, enumEnemyTankType);
+            enemyTankList.Add(tank);
         }
 
         /// <summary>

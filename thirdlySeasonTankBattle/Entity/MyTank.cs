@@ -14,9 +14,6 @@ namespace thirdlySeasonTankBattle.Entity
     /// </summary>
     internal class MyTank : Movething
     {
-
-        public bool IsMoving { get; set; } = false;
-
         /// <summary>
         /// 
         /// </summary>

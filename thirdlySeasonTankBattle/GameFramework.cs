@@ -22,6 +22,7 @@ namespace thirdlySeasonTankBattle
         {
             gameObjectManager.CreateMap();
             gameObjectManager.CreateMyTank();
+            gameObjectManager.CreateEnemyBornPoint();
         }
 
         /// <summary>

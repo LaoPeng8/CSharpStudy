@@ -46,6 +46,12 @@ namespace thirdlySeasonTankBattle.Entity
         public int Speed { get; set; }
 
         /// <summary>
+        /// 是否移动
+        /// </summary>
+        public bool IsMoving { get; set; } = false;
+
+
+        /// <summary>
         /// 物体的方向
         /// </summary>
         private Direction _direction;
