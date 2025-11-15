@@ -20,6 +20,8 @@ namespace thirdlySeasonTankBattle.Entity
     /// </summary>
     internal class Movething : GameObject
     {
+        private Object _lock = new object();
+
         /// <summary>
         /// 物体的图片 (朝向上的时候的图片)
         /// </summary>
@@ -53,6 +55,15 @@ namespace thirdlySeasonTankBattle.Entity
 
         /// <summary>
         /// 物体的方向
+        /// 
+        /// 键盘按下后会设置按下那个键方向的图片, 因为不同方向的图片宽高不一致, 所以会在此处获取该方向图片的宽高,
+        /// 这个过程由触发键盘事件的线程执行(系统线程),
+        /// 我们自己的线程 会不停的绘制 图片自身 DrawSelf() 这也需要用到 Bitmap 的图片,
+        /// 此处会冲突报错 System.InvalidOperationException: 对象当前正在其他地方使用
+        /// 所以需要加锁
+        /// 
+        /// 我记得Java多线程时, 获取值好像不会冲突吧, 都是 set时, 会导致不同的线程之间值不一致
+        /// 
         /// </summary>
         private Direction _direction;
         public Direction Direction {
@@ -66,26 +77,30 @@ namespace thirdlySeasonTankBattle.Entity
 
                 Width = 0;// 默认值
                 Height = 0;
-                if(Direction == Direction.Up && BitmapUp != null)
+                lock (_lock)
                 {
-                    Width = BitmapUp.Width;
-                    Height = BitmapUp.Height;
+                    if (Direction == Direction.Up && BitmapUp != null)
+                    {
+                        Width = BitmapUp.Width;
+                        Height = BitmapUp.Height;
+                    }
+                    if (Direction == Direction.Down && BitmapDown != null)
+                    {
+                        Width = BitmapDown.Width;
+                        Height = BitmapDown.Height;
+                    }
+                    if (Direction == Direction.Left && BitmapLeft != null)
+                    {
+                        Width = BitmapLeft.Width;
+                        Height = BitmapLeft.Height;
+                    }
+                    if (Direction == Direction.Right && BitmapRight != null)
+                    {
+                        Width = BitmapRight.Width;
+                        Height = BitmapRight.Height;
+                    }
                 }
-                if (Direction == Direction.Down && BitmapDown != null)
-                {
-                    Width = BitmapDown.Width;
-                    Height = BitmapDown.Height;
-                }
-                if (Direction == Direction.Left && BitmapLeft != null)
-                {
-                    Width = BitmapLeft.Width;
-                    Height = BitmapLeft.Height;
-                }
-                if (Direction == Direction.Right && BitmapRight != null)
-                {
-                    Width = BitmapRight.Width;
-                    Height = BitmapRight.Height;
-                }
+
             }
         }
 
@@ -127,6 +142,14 @@ namespace thirdlySeasonTankBattle.Entity
 
             result.MakeTransparent(Color.Black);// 将图片的黑色背景置为透明
             return result;
+        }
+
+        public override void DrawSelf()
+        {
+            lock(_lock)
+            {
+                base.DrawSelf();
+            }
         }
     }
 }

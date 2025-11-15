@@ -18,6 +18,9 @@ namespace thirdlySeasonTankBattle.Manager
         private static List<NotMovething> bossList = new List<NotMovething>();
         private static List<EnemyTank> enemyTankList = new List<EnemyTank>();
         private static MyTank myTank = null;
+        private static List<Bullet> bulletList = new List<Bullet>();
+        private static object _bullectLock = new object();
+        private static List<Explosion> explosionList = new List<Explosion>();
 
         private Point[] points = new Point[3];// 敌方坦克创建的坐标
         private static int enemyBornSpeed = 60;// 敌方坦克速度
@@ -44,6 +47,27 @@ namespace thirdlySeasonTankBattle.Manager
             {
                 enemyTank.Update();
             }
+
+            lock (_bullectLock)
+            {
+                // 使用 IsShow状态 避免了 一边遍历一边 删除
+                foreach (var bullet in bulletList)
+                {
+                    bullet.Update();// 只会绘制 IsShow = true 的子弹
+                }
+                bulletList = bulletList.Where(item => item.IsDestroy == false).ToList();// 绘制完后只保留未销毁的子弹
+                // 这个 bulletList 赋值的过程 应该和 CreateBullet()中的bulletList.Add有冲突, 所以加锁
+            }
+
+            foreach(var explosion in explosionList)
+            {
+                explosion.Update();
+            }
+            if(explosionList.Count > 50)
+            {
+                explosionList = explosionList.Where(item => item.IsNeedDestroy == true).ToList();// 将爆炸效果播放完了需要销毁的爆炸效果剔除掉
+            }
+
 
             myTank.Update();// 绘制我的坦克
 
@@ -84,14 +108,68 @@ namespace thirdlySeasonTankBattle.Manager
             int indexType = new Random().Next(0, 5);
             EnumEnemyTankType enumEnemyTankType = (EnumEnemyTankType)Enum.ToObject(typeof(EnumEnemyTankType), indexType);
             CreateEnemyTank(position.X, position.Y, enumEnemyTankType);
+            GameSoundManager.PlayAdd();
 
             enemyBornCount = 0;
         }
 
-        private static void CreateEnemyTank(int x, int y, EnumEnemyTankType enumEnemyTankType)
+        private void CreateEnemyTank(int x, int y, EnumEnemyTankType enumEnemyTankType)
         {
             EnemyTank tank = new EnemyTank(x, y, enumEnemyTankType);
             enemyTankList.Add(tank);
+        }
+
+        /// <summary>
+        /// 创建子弹
+        /// </summary>
+        public static void CreateBullet(int x, int y, Direction direction, Tag tag)
+        {
+            lock(_bullectLock)
+            {
+                Bullet bullet = new Bullet(x, y, 5, direction, tag);
+                bulletList.Add(bullet);
+            }
+        }
+
+        /// <summary>
+        /// 创建爆炸效果
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public static void CreateExplosion(int x, int y)
+        {
+            Explosion explosion = new Explosion(x, y);
+            explosionList.Add(explosion);
+        }
+
+        /// <summary>
+        /// 移除子弹
+        /// 从bulletList中移除, 之后遍历bulletList绘制子弹时, 就绘制不到被移除的子弹了
+        ///     当子弹在移动过程中超出窗体, 就需要移除子弹
+        ///     当子弹与其他物体发生碰撞, 就需要移除子弹
+        /// </summary>
+        /// <param name="bullet"></param>
+        public static void RemoveBullet(Bullet bullet)
+        {
+            bulletList.Remove(bullet);
+        }
+
+        /// <summary>
+        /// 销毁墙
+        /// </summary>
+        /// <param name="wall"></param>
+        public static void DestroyWall(NotMovething wall)
+        {
+            wallList.Remove(wall);
+        }
+
+        /// <summary>
+        /// 销毁坦克
+        /// </summary>
+        /// <param name="wall"></param>
+        public static void DestroyTank(EnemyTank enemyTank)
+        {
+            enemyTankList.Remove(enemyTank);
         }
 
         /// <summary>
@@ -323,9 +401,9 @@ namespace thirdlySeasonTankBattle.Manager
             }
         }
 
-        
+
         /// <summary>
-        /// MyTank 是否和墙发生了碰撞
+        /// rectangle 是否和墙发生了碰撞
         /// </summary>
         /// <returns></returns>
         public static NotMovething IsCollideWall(Rectangle rectangle)
@@ -342,7 +420,7 @@ namespace thirdlySeasonTankBattle.Manager
         }
 
         /// <summary>
-        /// MyTank 是否和钢铁墙发生了碰撞
+        /// rectangle 是否和钢铁墙发生了碰撞
         /// </summary>
         /// <returns></returns>
         public static NotMovething IsCollideSteelWall(Rectangle rectangle)
@@ -359,17 +437,50 @@ namespace thirdlySeasonTankBattle.Manager
         }
 
         /// <summary>
-        /// MyTank 是否和Boss发生了碰撞
+        /// rectangle 是否和Boss发生了碰撞
         /// </summary>
         /// <returns></returns>
         public static NotMovething IsCollideBossTank(Rectangle rectangle)
         {
-            foreach (var steel in bossList)
+            foreach (var boss in bossList)
             {
-                if (steel.GetRectangle().IntersectsWith(rectangle))
+                if (boss.GetRectangle().IntersectsWith(rectangle))
                 {
-                    return steel;
+                    return boss;
                 }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// rectangle 是否和敌方坦克发生了碰撞
+        /// </summary>
+        /// <param name="rectangle"></param>
+        /// <returns></returns>
+        public static EnemyTank IsCollideEnemyTank(Rectangle rectangle)
+        {
+            foreach(var tank in enemyTankList)
+            {
+                if(tank.GetRectangle().IntersectsWith(rectangle))
+                {
+                    return tank;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// rectangle 是否和我的坦克发生了碰撞
+        /// </summary>
+        /// <param name="rectangle"></param>
+        /// <returns></returns>
+        public static MyTank IsCollideMyTank(Rectangle rectangle)
+        {
+            if(myTank.GetRectangle().IntersectsWith(rectangle))
+            {
+                return myTank;
             }
 
             return null;

@@ -14,6 +14,10 @@ namespace thirdlySeasonTankBattle.Entity
     /// </summary>
     internal class MyTank : Movething
     {
+        private int Hp { get; set; }
+        private int originalX = 0;
+        private int originalY = 0;
+
         /// <summary>
         /// 
         /// </summary>
@@ -25,7 +29,10 @@ namespace thirdlySeasonTankBattle.Entity
         {
             this.X = x;
             this.Y = y;
+            this.originalX = x;
+            this.originalY = y;
             this.Speed = speed;
+            this.Hp = 3;
 
             this.BitmapDown = Resources.MyTankDown;
             this.BitmapUp = Resources.MyTankUp;
@@ -44,55 +51,54 @@ namespace thirdlySeasonTankBattle.Entity
             switch (args.KeyCode)
             {
                 case Keys.W:
-                    {
-                        this.Direction = Direction.Up;
-                        IsMoving = true;
-                        break;
-                    }
                 case Keys.Up:
                     {
-                        this.Direction = Direction.Up;
+                        if (this.Direction != Direction.Up)
+                        {
+                            this.Direction = Direction.Up;
+                        }
                         IsMoving = true;
                         break;
                     }
                 case Keys.S:
-                    {
-                        this.Direction = Direction.Down;
-                        IsMoving = true;
-                        break;
-                    }
                 case Keys.Down:
                     {
-                        this.Direction = Direction.Down;
+                        if (this.Direction != Direction.Down)
+                        {
+                            this.Direction = Direction.Down;
+                        }
                         IsMoving = true;
                         break;
                     }
                 case Keys.A:
-                    {
-                        this.Direction = Direction.Left;
-                        IsMoving = true;
-                        break;
-                    }
                 case Keys.Left:
                     {
-                        this.Direction = Direction.Left;
+                        if (this.Direction != Direction.Left)
+                        {
+                            this.Direction = Direction.Left;
+                        }
                         IsMoving = true;
                         break;
                     }
                 case Keys.D:
+                case Keys.Right:
                     {
-                        this.Direction = Direction.Right;
+                        if (this.Direction != Direction.Right)
+                        {
+                            this.Direction = Direction.Right;
+                        }
                         IsMoving = true;
                         break;
                     }
-                case Keys.Right:
+                case Keys.Space:
                     {
-                        this.Direction = Direction.Right;
-                        IsMoving = true;
+                        Attack();
                         break;
                     }
             }
         }
+
+
 
         /// <summary>
         /// 松开键盘后触发
@@ -117,7 +123,44 @@ namespace thirdlySeasonTankBattle.Entity
             }
         }
 
-        
+        /// <summary>
+        /// 发射子弹
+        /// </summary>
+        private void Attack()
+        {
+            int x = this.X;
+            int y = this.Y;
+
+            switch (this.Direction)
+            {
+                case Direction.Up:
+                    {
+                        x = x + this.Width / 2;
+                        break;
+                    }
+                case Direction.Down:
+                    {
+                        x = x + this.Width / 2;
+                        y = y + this.Height;
+                        break;
+                    }
+                case Direction.Left:
+                    {
+                        y = y + this.Height / 2;
+                        break;
+                    }
+                case Direction.Right:
+                    {
+                        x = x + this.Width;
+                        y = y + this.Height / 2;
+                        break;
+                    }
+            }
+
+            GameObjectManager.CreateBullet(x, y, Direction, Tag.MyTank);
+            GameSoundManager.PlayFire();
+        }
+
         /// <summary>
         /// 绘制自己, 并调用Move() 如果在移动状态(按下方向键则在移动状态,松开反之), 则修改坐标, 每次绘制坐标不一样, 就好像在移动
         /// </summary>
@@ -260,5 +303,23 @@ namespace thirdlySeasonTankBattle.Entity
             #endregion
 
         }
+
+        /// <summary>
+        /// 被攻击
+        /// </summary>
+        public void TankDamage()
+        {
+            this.Hp--;
+
+            if (this.Hp < 1)
+            {
+                X = originalX;
+                Y = originalY;
+                this.Hp = 3;
+            }
+        }
+
+
+
     }
 }

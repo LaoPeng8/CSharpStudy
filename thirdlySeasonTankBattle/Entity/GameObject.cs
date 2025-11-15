@@ -43,7 +43,7 @@ namespace thirdlySeasonTankBattle.Entity
             DrawSelf();
         }
 
-        public void DrawSelf()
+        public virtual void DrawSelf()
         {
             Graphics graphics = GameFramework.graphics;
             graphics.DrawImage(GetImage(), X, Y);// 那么此处绘制时, 实际都是子类对象, 必然都实现了 GetImage()

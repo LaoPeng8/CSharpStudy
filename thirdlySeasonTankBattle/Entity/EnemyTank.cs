@@ -26,6 +26,10 @@ namespace thirdlySeasonTankBattle.Entity
 
         private Direction[] directionAll = new Direction[] {Direction.Up, Direction.Down, Direction.Left, Direction.Right};
         Random directionRandom = new Random();
+        private int AttackSpeed { get; set; }
+        Random attackSpeedRandom = new Random();
+        private int attackSpeedCount = 0;
+        private int randomChangeCount = 0;
 
         /// <summary>
         /// 
@@ -42,6 +46,7 @@ namespace thirdlySeasonTankBattle.Entity
 
             selectTank(enumEnemyTankType);
             this.Direction = direction;
+            AttackSpeed = attackSpeedRandom.Next(60, 180);// 60帧 ~ 180帧的速度, 1秒~3秒发射一颗子弹
         }
 
         private void selectTank(EnumEnemyTankType enumEnemyTankType)
@@ -99,6 +104,44 @@ namespace thirdlySeasonTankBattle.Entity
 
 
         /// <summary>
+        /// 发射子弹
+        /// </summary>
+        private void Attack()
+        {
+            int x = this.X;
+            int y = this.Y;
+
+            switch (this.Direction)
+            {
+                case Direction.Up:
+                    {
+                        x = x + this.Width / 2;
+                        break;
+                    }
+                case Direction.Down:
+                    {
+                        x = x + this.Width / 2;
+                        y = y + this.Height;
+                        break;
+                    }
+                case Direction.Left:
+                    {
+                        y = y + this.Height / 2;
+                        break;
+                    }
+                case Direction.Right:
+                    {
+                        x = x + this.Width;
+                        y = y + this.Height / 2;
+                        break;
+                    }
+            }
+
+            GameObjectManager.CreateBullet(x, y, Direction, Tag.EnumyTank);
+            GameSoundManager.PlayFire();
+        }
+
+        /// <summary>
         /// 绘制自己, 并调用Move() 如果在移动状态(EnemyTank一直会在移动状态), 则修改坐标, 每次绘制坐标不一样, 就好像在移动
         /// </summary>
         public override void Update()
@@ -111,6 +154,21 @@ namespace thirdlySeasonTankBattle.Entity
             MoveCheck();
             Move();
             base.Update();
+
+            attackSpeedCount++;
+            if(attackSpeedCount >= AttackSpeed)
+            {
+                Attack();// 攻击
+                AttackSpeed = attackSpeedRandom.Next(60, 180);// 重置随机攻击时间
+                attackSpeedCount = 0;
+            }
+
+            // 连续5秒钟没有一次转向即调用一次随机转向 (每次转向后重置 randomChangeCount)
+            randomChangeCount++;
+            if(randomChangeCount > 60 * 3)
+            {
+                RandomChangeDirection();
+            }
         }
 
         public void Move()
@@ -155,6 +213,7 @@ namespace thirdlySeasonTankBattle.Entity
             this.Direction = directions[index];
 
             MoveCheck();// 改变方向后, 调用移动检测, 如果依旧碰撞则会继续递归调用改变方向, 直到改变方向后移动检测没有碰撞
+            randomChangeCount = 0;
         }
 
         /// <summary>
@@ -241,11 +300,39 @@ namespace thirdlySeasonTankBattle.Entity
             }
             #endregion
 
-
-
         }
 
-
+        /// <summary>
+        /// 随机改变方向
+        /// </summary>
+        private void RandomChangeDirection()
+        {
+            randomChangeCount = 0;
+            int v = directionRandom.Next(4, 17);
+            if (v > 8)
+            {
+                return;//
+            }
+            else
+            {
+                if (v >= 1 && v <= 2)
+                {
+                    this.Direction = Direction.Up;
+                }
+                else if (v >= 3 && v <= 4)
+                {
+                    this.Direction = Direction.Down;
+                }
+                else if (v >= 5 && v <= 6)
+                {
+                    this.Direction = Direction.Left;
+                }
+                else if (v >= 7 && v <= 8)
+                {
+                    this.Direction = Direction.Right;
+                }
+            }
+        }
 
     }
 }
