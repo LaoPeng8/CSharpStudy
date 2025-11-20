@@ -7,4 +7,6 @@ using fourthlySeason;
 Demo01 demo01 = new Demo01();
 //demo01.Test01();
 //demo01.Test02();
-demo01.Test03();
+//demo01.Test03();
+//demo01.Test04();
+demo01.Test05();

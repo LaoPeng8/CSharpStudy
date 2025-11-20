@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace fourthlySeason
 {
@@ -241,6 +242,109 @@ namespace fourthlySeason
         }
 
 
+        /// <summary>
+        /// 正则表达式
+        /// 
+        /// 普通数字字母, 表示匹配一个对应字符
+        /// \d 表示匹配一个任意数字
+        /// \D 表示\d的补集, 即表示匹配任意一个 非数字
+        /// * 表示匹配多个, 例: 5* 表示匹配0~N个5, \d* 表示匹配 0~N个任意数字
+        /// + 表示匹配1~N个, 例: 5+ 表示匹配 1~N个5, \d+ 表示匹配 1~N个任意数字
+        /// ^ 表示字符串需要以什么开头, 例 ^5 表示需要以5开头, ^5* 表示需要以 0~N个5开头
+        /// $ 表示字符串需要以什么结尾, 例
+        /// \w 表示匹配一个任意 大小写字母 或 0-9 或 - 或 汉字
+        /// \W 表示\w的补集, 即表示匹配任意一个 非大小写字母,非0-9,非-
+        /// [] 表示可以自定义一个字符集, 像 \d \w 这种就是匹配的一个字符集
+        /// [^] ^在[]中表示补集, 例[a-c]原本匹配a-c的任意一个字符, [^a-c]表示匹配任意一个 a-c 之外的字符
+        /// 
+        /// </summary>
+        public void Test04()
+        {
+            Console.WriteLine(Regex.IsMatch("jdasiojf7654321", @"5*"));// True 字符串中含有0~N个5 符合
+            Console.WriteLine(Regex.IsMatch("jdasiojf7654321", @"^5"));// False 字符串中不是以 5开头 不符合
+            Console.WriteLine(Regex.IsMatch("jdasiojf7654321", @"^5*"));// True 字符串开头包含 0~N个5 符合
+            Console.WriteLine(Regex.IsMatch("JavaScript", @"Script$"));// True 字符串中是以 Script结尾 符合
+            Console.WriteLine(Regex.IsMatch("JavaScript", @"S$"));// False 字符串中结尾不是S 不符合
+            Console.WriteLine(Regex.IsMatch("JavaScript", @"S*$"));// True 字符串中结尾是 0~N个S 结尾 符合
+            Console.WriteLine();
 
+            Console.WriteLine(Regex.IsMatch("JavaScript", @"[0123456789]"));// False 字符串中并无包含 0或1或2.3.4.5.6.7.8.9
+            Console.WriteLine(Regex.IsMatch("Python", @"[abc]"));// False 字符串中并无包含 a 或 b 或 c
+            Console.WriteLine(Regex.IsMatch("Python", @"[a-cf-z]"));// True 匹配任意一个 a-c 或 f-z, h在f-z中, True
+            Console.WriteLine();
+
+            Console.WriteLine(IsAllowVarName("0userName"));// False 数字开头
+            Console.WriteLine(IsAllowVarName("_UserName"));// True
+            Console.WriteLine(IsAllowVarName("_user_name"));// True
+            Console.WriteLine(IsAllowVarName("_user-name"));// False 包含 -
+            Console.WriteLine(IsAllowVarName("userName1"));// True
+            Console.WriteLine(IsAllowVarName("UserName2"));// True
+            Console.WriteLine(IsAllowVarName("3UserName3"));// False
+            Console.WriteLine(IsAllowVarName("UserName哈"));// False 包含非 a-z 0-9 _
+
+        }
+
+        /// <summary>
+        /// 判断是否是一个合法的变量名
+        /// 
+        /// 以字符,数字,下划线组成, 不能以数字开头, 
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        private bool IsAllowVarName(string str)
+        {
+            if(string.IsNullOrEmpty(str))
+            {
+                return false;
+            }
+            
+
+            return Regex.IsMatch(str, @"^[^0-9][a-zA-Z0-9_]+$");
+        }
+
+        /// <summary>
+        /// 正则表达式
+        /// 
+        /// {n} 匹配前面的字符n次
+        /// {n,} 匹配前面的字符n次 或 多于n次
+        /// {n,m} 匹配前面的字符n 至 m次
+        /// ? 匹配0次 或 1次
+        /// + 匹配1次 或 多次
+        /// * 匹配0次 或 多次
+        /// 
+        /// \s 表示匹配任意空白符 (包含换行符\n 回车符\r 制表符\t 垂直制表符\v 换页符\f)
+        /// \S 表示 \s的补集, 匹配所有 非\s
+        /// . 表示匹配除换行符 \n 外的其他所有字符
+        /// 
+        /// | 逻辑或
+        /// 
+        /// </summary>
+        public void Test05()
+        {
+            //Console.WriteLine(Regex.Replace("https://www.baidu.com", @"[a-z]", "*"));
+
+            string regex = @"^\d{5,12}$";// 以数字开头,\d5-12个, 以数字结尾
+            Console.WriteLine(Regex.IsMatch("38272", regex));// True
+            Console.WriteLine(Regex.IsMatch("382", regex));// False
+            Console.WriteLine(Regex.IsMatch("38272387272812", regex));// False
+            Console.WriteLine(Regex.IsMatch("38272387", regex));// True
+            Console.WriteLine();
+
+            Console.WriteLine(Regex.IsMatch("a", @"\d|a"));// True  匹配 任意一个数字 或 a
+            Console.WriteLine(Regex.IsMatch("7", @"\d|a"));// True
+            Console.WriteLine(Regex.IsMatch("c", @"\d|a"));// False
+            Console.WriteLine();
+
+            // 用 () 分组
+            Console.WriteLine(Regex.IsMatch("abb", @"ab{2}"));// 表示匹配 abb (这样表示 a b{2} 匹配a一次, b两次)
+            Console.WriteLine(Regex.IsMatch("abab", @"(ab){2}"));// 表示匹配 abab (这边表示 ab{2} ab一起匹配2次)
+            Console.WriteLine();
+
+            // \转义
+            Console.WriteLine(Regex.IsMatch("ad(cd", @"\("));// 表示匹配 ( 需要转义 \( 否则就是分组的 (
+            Console.WriteLine();
+
+
+        }
     }
 }
