@@ -9,4 +9,8 @@ Demo01 demo01 = new Demo01();
 //demo01.Test02();
 //demo01.Test03();
 //demo01.Test04();
-demo01.Test05();
+//demo01.Test05();
+
+Demo02 demo02 = new Demo02();
+//demo02.Test01();
+demo02.Test02();
