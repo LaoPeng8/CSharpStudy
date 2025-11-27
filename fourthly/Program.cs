@@ -13,4 +13,11 @@ Demo01 demo01 = new Demo01();
 
 Demo02 demo02 = new Demo02();
 //demo02.Test01();
-demo02.Test02();
+//demo02.Test02();
+//demo02.Test03();
+//demo02.Test04();
+//demo02.Test04Plus();
+//demo02.Test05();
+
+Demo03 demo03 = new Demo03();
+demo03.Test01();

@@ -147,5 +147,77 @@ namespace fourthlySeason
         {
             return "乱我心者, 今日之日多烦忧" + "("+x+"行)";
         }
+
+        /// <summary>
+        /// 多播委托
+        ///     委托可以包含多个方法, 这种委托称为多播委托, 使用多播委托就可以按照顺序调用多个方法, 多播委托只能得到调用的最后一个方法的结果, 所以一般我们把多播委托的返回类型声明为void
+        ///     多播委托包含一个逐个调用的委托集合, 如果通过委托调用的其中一个方法抛出异常, 整个迭代就会停止.
+        ///     
+        /// 取得委托中的所有方法 GetInvocationList()
+        /// </summary>
+
+        public void Test03()
+        {
+            Action action = Demo5;
+            action += Demo6;
+            action += Demo5;
+
+            //action();
+
+            Delegate[] delegates = action.GetInvocationList();// 获取委托中的所有方法
+            foreach(Delegate item in delegates)
+            {
+                item.DynamicInvoke();// 调用委托中的方法
+            }
+
+        }
+
+        private void Demo5()
+        {
+            Console.WriteLine("滚滚长江东逝水");
+        }
+        private void Demo6()
+        {
+            Console.WriteLine("浪花淘尽英雄");
+        }
+
+
+        /// <summary>
+        /// 匿名方法, 大多数赋值给委托的方法, 都只在此处调用, 单独定义一个方法对整体结构不优雅, 就可以使用匿名方法
+        /// </summary>
+        public void Test04()
+        {
+            // 匿名方法, 直接通过 delegate (参数列表) {方法体}
+            Func<int, int, int> plus = delegate (int x, int y)
+            {
+                return x + y;
+            };
+
+            int res = plus(1, 2);
+            Console.WriteLine("result: " + res);
+        }
+
+        /// <summary>
+        /// Lambda 表达式简化匿名方法
+        /// </summary>
+        public void Test04Plus()
+        {
+            //Func<int, int, int> plus = (x, y) => { return x + y; };
+            Func<int, int, int> plus = (x, y) =>  x + y;// 当Lambda方法体只有一行语句时, 可以省略 {} 和 return
+
+            int res = plus(1, 2);
+            Console.WriteLine("result: " + res);
+        }
+
+        /// <summary>
+        /// Lambda 可以访问外部的 参数 (既然Lambda可以房屋内外部的参数, 那么显然匿名方法(Test04())也是可以访问外部的参数的)
+        /// </summary>
+        public void Test05() {
+            int b = 10;
+            Func<int, int> func = (a) => a + b;
+
+            int res = func(510);
+            Console.WriteLine("result: " + res);
+        }
     }
 }
