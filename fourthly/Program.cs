@@ -20,4 +20,7 @@ Demo02 demo02 = new Demo02();
 //demo02.Test05();
 
 Demo03 demo03 = new Demo03();
-demo03.Test01();
+//demo03.Test01();
+
+Demo04 demo04 = new Demo04();
+demo04.Test01();

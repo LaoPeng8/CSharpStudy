@@ -56,3 +56,4 @@ nunit-*.xml
 # 上面是我在github选的 dotnet的.gitignore自带的, 下面才是我加的
 /.vs
 /**/.vs
+/.idea/.idea.CSharpStudy/.idea
