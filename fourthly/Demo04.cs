@@ -1,7 +1,13 @@
-﻿using System;
+﻿#define DEBUGXX
+// 宏定义, 必须在第一行
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using fourthlySeason.myAttribute;
 
 namespace fourthlySeason
 {
@@ -35,6 +41,7 @@ namespace fourthlySeason
     /**
      * 反射
      */
+    [Info("PengJiaJun", "0.0.1", "这个类学习了反射, 特性 (最近几天都没学习啊, 下班了过的好快 T_T)")]
     internal class Demo04
     {
 
@@ -113,5 +120,63 @@ namespace fourthlySeason
 
         }
 
+        /**
+         * [] 特性
+         * Obsolete("提示", 是否报错) false 仅给出警告, true则编译报错
+         */
+        [Obsolete("不再建议使用, 请使用 Demo04.Test03", false)]
+        public void Test02()
+        {
+            Console.WriteLine("Hello, Test02");
+        }
+
+        public void Test03()
+        {
+            DebugLog("进入Test03()方法, " + DateTime.Now);
+            Console.WriteLine("Hello, Test03");
+            DebugLog("结束Test03()方法, " + DateTime.Now);
+        }
+
+        /**
+         * 用来 Debug 时打印信息用的, 直接用 WriteLine 打印, 调试完成后可能忘记删除
+         * 使用特性 可以很方便的开关 打印信息, 避免流入到生产环境
+         * 
+         * 仅当 宏定义 #define DEBUGXX 存在时, 该方法才存在, 其他类/方法调用本方法时, 才会实际调用, 否则不会调用
+         * 
+         * 奇怪的是 当我定义后 [Conditional("DEBUG")] 即使我未定义 #define DEBUG 该方法依旧会打印, 可能是其他哪些地方定义了 #define DEBUG 吗???
+         */
+        [Conditional("DEBUGXX")]
+        public static void DebugLog(string message)
+        {
+            Console.WriteLine($"-----Message: {message}");
+        }
+
+        /**
+         * [CallerFilePath] 调用者文件名 (哪个文件调用的我)
+         * [CallerLineNumber] 调用者行号 (哪一行调用的)
+         * [CallerMemberName] 谁调用的 (目前打印的是方法名)
+         * 
+         * [DebuggerStepThrough] Debug时, 不会进入该特性标记的方法, 直接略过
+         */
+        [DebuggerStepThrough]
+        public void Test04(string msg, [CallerFilePath] string filePath = "", [CallerMemberName] string memberName = "",  [CallerLineNumber] int lineNumber = 0)
+        {
+            Console.WriteLine($"我打印了: {msg} (我被{filePath}文件中的{memberName}在{lineNumber}行处调用)");
+            // 我打印了: 人有悲欢离合, 月有阴晴圆缺, 此事古难全 (我被D:\eatMeal\CSharp\CSharpProject\CSharpStudy\fourthly\Program.cs文件中的<Main>$在29行处调用)
+            // 我打印了: 但愿人长久, 千里共婵娟 (我被D:\eatMeal\CSharp\CSharpProject\CSharpStudy\fourthly\Program.cs文件中的<Main>$在30行处调用)
+        }
+
+        /**
+         * 
+         */
+        public void Test05()
+        {
+            Type demo04Type = typeof(Demo04);
+
+            bool flag = demo04Type.IsDefined(typeof(InfoAttribute), false);// IsDefined 判断该类, 是否使用了特性 InfoAttribute
+            Console.WriteLine(flag);
+
+            object[] value = demo04Type.GetCustomAttributes(false);
+        }
     }
 }

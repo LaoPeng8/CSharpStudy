@@ -23,4 +23,10 @@ Demo03 demo03 = new Demo03();
 //demo03.Test01();
 
 Demo04 demo04 = new Demo04();
-demo04.Test01();
+//demo04.Test01();
+//demo04.Test02();// 没有报错, 但会给出提示, 已过时
+//demo04.Test03();
+//demo04.Test04("人有悲欢离合, 月有阴晴圆缺, 此事古难全");
+//demo04.Test04("但愿人长久, 千里共婵娟");
+demo04.Test05();
+
