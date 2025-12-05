@@ -28,5 +28,9 @@ Demo04 demo04 = new Demo04();
 //demo04.Test03();
 //demo04.Test04("人有悲欢离合, 月有阴晴圆缺, 此事古难全");
 //demo04.Test04("但愿人长久, 千里共婵娟");
-demo04.Test05();
+//demo04.Test05();
+
+Demo05 demo05 = new Demo05();
+//demo05.Test01();
+demo05.Test02();
 
