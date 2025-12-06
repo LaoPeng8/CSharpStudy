@@ -32,5 +32,12 @@ Demo04 demo04 = new Demo04();
 
 Demo05 demo05 = new Demo05();
 //demo05.Test01();
-demo05.Test02();
+//demo05.Test02();
+
+Demo06 demo06 = new Demo06();
+//demo06.Test01();
+//demo06.Test02();
+//demo06.Test03();
+//demo06.Test04();
+demo06.Test05();
 

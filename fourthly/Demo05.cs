@@ -57,6 +57,8 @@ namespace fourthlySeason
          *  起初版本为 .NET Framework x.x 不能跨平台, 只能在Windows上运行 (此时异步委托应该就是可以用的)
          *  后面版本为 .NET Core x.x 为跨平台, Windows, Linux, macOs (之后异步委托可能就不能用了, 因为Linux maxOS不支持)
          *  后面版本为 .NET x 统一 .NET Core / .NET Framework
+         *  
+         *  了解之后发现 现在都是用 async/await 来完成异步操作, 后续本课程结束后再去学习异步编程 https://www.bilibili.com/video/BV1Fw411F71A/
          */
         public void Test02()
         {
@@ -69,5 +71,7 @@ namespace fourthlySeason
 
             Console.WriteLine("Demo05.Test02()结束执行...");
         }
+
+
     }
 }
