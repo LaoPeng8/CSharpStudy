@@ -285,5 +285,146 @@ namespace fourthlySeason
             countTest.IsBreak = true;
             Console.WriteLine(countTest);
         }
+
+        /// <summary>
+        /// 线程池
+        ///     线程池中的所有线程都是后台线程.
+        ///     不能给入池的线程改为前台线程.
+        ///     不能给入池的线程设置优先级 或 名称.
+        ///     入池的线程只能用于时间较短的任务, 如果线程要一直运行就应该使用Thread类创建一个线程
+        /// </summary>
+        public void Test06()
+        {
+            for(int i = 0; i < 10; i++)
+            {
+                ThreadPool.QueueUserWorkItem(DownloadWithPool);
+            }
+            Thread.Sleep(3000);
+        }
+
+        private void DownloadWithPool(Object state)
+        {
+            for(int i = 0; i < 3; i++)
+            {
+                Console.WriteLine("DownloadWithPool...: " + Thread.CurrentThread.ManagedThreadId);
+                Thread.Sleep(100);
+            }
+        }
+
+
+        /// <summary>
+        /// 任务
+        ///     在 .NET 新的命名空间System.Threading.Tasks包含了类抽象出了线程功能, 在后台使用的Thread进行管理的.
+        ///     任务表示应完成某个单元的工作. 这个工作可以在单独的线程中运行, 也可以以同步方式启动一个任务.
+        ///     任务也是异步编程中的一种实现方式.
+        /// </summary>
+        public void Test07()
+        {
+            TaskFactory taskFactory = new TaskFactory();
+            taskFactory.StartNew(() =>
+            {
+                for(int i = 0; i < 10; i++)
+                {
+                    Console.WriteLine("通过 new TaskFactory().StartNew()创建任务 - " + (i+1));
+                }
+            });
+
+            // 好像并不存在 静态的StartNew()方法
+            //TaskFactory.StartNew(() =>
+            //{
+            //    for (int i = 0; i < 10; i++)
+            //    {
+            //        Console.WriteLine("通过 TaskFactory.StartNew()创建任务 - " + (i + 1));
+            //    }
+            //});
+
+            Task task = new Task(() =>
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    Console.WriteLine("通过 new Task().Start()创建任务 - " + (i + 1));
+                }
+            });
+            task.Start();
+
+            Thread.Sleep(3000);// 任务是由ThreadPool管理的, 所以也是后台线程, Main方法结束后,程序就结束了
+        }
+
+        /// <summary>
+        /// 连续任务
+        ///     如果一个任务t1的执行是依赖于另一个任务t2的, 那么就需要在这个任务t2执行完成之后才开始执行t1. 这个时候我们可以使用连续任务.
+        /// </summary>
+        public void Test08()
+        {
+            Task task = new Task(() =>
+            {
+                Console.WriteLine("这是任务1 开始执行...");
+                for (int i = 0; i < 10; i++)
+                {
+                    Console.WriteLine("这是任务1 执行中...");
+                }
+                Console.WriteLine("这是任务1 执行完成...");
+            });
+
+            object t2 = new object();
+            Task task2 = task.ContinueWith((t1, o) =>
+            {
+                Console.WriteLine("这是任务2 开始执行...");
+                for (int i = 0; i < 10; i++)
+                {
+                    Console.WriteLine("这是任务2 执行中...");
+                }
+                Console.WriteLine("这是任务2 执行完成...");
+            }, t2);
+
+            task.Start();
+
+            Thread.Sleep(6000);
+        }
+
+        /// <summary>
+        /// 资源访问冲突
+        ///     正常来说打印时, 不会打印出 State: 5
+        ///     但是在线程不安全的情况下, 会就出现冲突, 当某一线程执行state++;后准备打印之前, CPU调度了另一个线程执行到了state = 5;
+        ///     后CPU继续调度之前的线程此时打印时, 就会打印出 State: 5
+        ///     最简单的方式就是加锁
+        /// </summary>
+        private object _lock = new object();
+        private int state = 5;
+        private void Test09()
+        {
+            // 加锁后, 多个线程进来时, 只有拿到锁了, 才会进入内部执行, 相当于并行变成了串行
+            lock(_lock)
+            {
+                if (state == 5)
+                {
+                    state++;
+                    Console.WriteLine("State: " + state + ": " + Thread.CurrentThread.ManagedThreadId);
+                }
+                state = 5;
+            }
+            
+
+        }
+
+        public void Test10()
+        {
+            for(int i = 0; i < 100; i++)
+            {
+                Thread t = new Thread(Test09);
+                t.Start();
+            }
+
+        }
+
+        /// <summary>
+        /// 死锁
+        ///     假设现在的场景是化妆, 化妆需要镜子和口红
+        ///     当两个不同的线程分别持有镜子锁 和 口红锁时, 就发生了死锁, 两个线程都在等待获取另一把锁才能继续执行, 问题是双方都在等待即永远也获取不到了    
+        /// </summary>
+        public void Test11()
+        {
+
+        }
     }
 }
