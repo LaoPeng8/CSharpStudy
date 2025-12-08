@@ -48,5 +48,9 @@ Demo06 demo06 = new Demo06();
 Demo07 demo07 = new Demo07();
 //demo07.Test01();
 //demo07.Test02();
-demo07.Test03();
+//demo07.Test03();
+//demo07.Test04();
+//demo07.Test05();
+//demo07.Test06();
+demo07.Test07();
 
