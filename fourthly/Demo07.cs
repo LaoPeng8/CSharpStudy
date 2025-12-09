@@ -189,5 +189,100 @@ namespace fourthlySeason
             String[] fileContentStrings = new String[] { "时维九月，序属三秋。", "潦水尽而寒潭清，烟光凝而暮山紫。俨骖𬴂于上路，访风景于崇阿。临帝子之长洲，得天人之旧馆。", "层峦耸翠，上出重霄；飞阁流丹，下临无地。鹤汀凫渚，穷岛屿之萦回；桂殿兰宫，即冈峦之体势。" };
             File.WriteAllLines(filePathNew2, fileContentStrings, Encoding.UTF8);
         }
+
+
+        /// <summary>
+        /// 文件流
+        /// 复制一个文件
+        /// </summary>
+        public void Test08()
+        {
+            // 三个参数: 文件路径, FileMode控制打开类型, FileAccess控制读写
+            FileStream fileInputStream = new FileStream("C:/Users/PengJiaJun/Desktop/三分化 2025-07-28.png", FileMode.Open, FileAccess.Read);
+            FileStream fileOutputStream = new FileStream("D:/eatMeal/CSharp/CSharpProject/CSharpStudy/fourthly/file/img/三分化.png", FileMode.Create, FileAccess.Write);
+
+            Console.WriteLine("开始写入...");
+            int nextByte = -1;
+            while ((nextByte = fileInputStream.ReadByte()) != -1)// 读取一个字节并且文件指针向后移动
+            {
+                fileOutputStream.WriteByte((byte)nextByte);
+            }
+            Console.WriteLine("写入完成...");
+
+            //fileOutputStream.Flush();// 将输出流中的数据刷出去(记得以前学Java IO流的时候, 就有这个Flush()方法, 当时老师好像是说其实调不调都可以, Close()方法中已经处理了)
+            fileOutputStream.Close();
+            fileInputStream.Close();
+        }
+
+        /// <summary>
+        /// 文件流
+        /// 复制一个文件
+        /// </summary>
+        public void Test09()
+        {
+            // 三个参数: 文件路径, FileMode控制打开类型, FileAccess控制读写
+            FileStream fileInputStream = new FileStream("D:/eatMeal/JavaNB/javaProject/Java/图/MVC理解.png", FileMode.Open, FileAccess.Read);
+            FileStream fileOutputStream = new FileStream("D:/eatMeal/CSharp/CSharpProject/CSharpStudy/fourthly/file/img/三分化2.png", FileMode.Create, FileAccess.Write);
+
+            // 像Test08()那样, 使用ReadByte()/WriteByte()一次读写一个字节, 显然不现实
+            // Read(读取的存放在该字节数组, 偏移量(从字节数组0处开始存放), 每次读多少个字节(一般与第一个参数的Length一致)) 返回读取的字节个数, 最后一次读取文件如果读不满长度在此处就不会是1024, 文件末尾返回0
+            // Write(写入的字节数组, 偏移量(从字节数组0处开始写入), 写入的字节长度(可能文件刚开始读取时长度是第一个参数的Length, 但是当文件末尾读取一次读不满第一个参数的长度, 所以用len))
+            Console.WriteLine("开始写入...");
+            int len = -1;
+            byte[] tempBytes = new byte[1024];// 缓冲区
+            while((len = fileInputStream.Read(tempBytes, 0, 1024)) != 0)
+            {
+                fileOutputStream.Write(tempBytes, 0, len);
+            }
+            Console.WriteLine("写入完成...");
+
+            fileOutputStream.Close();
+            fileInputStream.Close();
+        }
+
+
+        /// <summary>
+        /// 字符流
+        /// 读取一行
+        /// </summary>
+        public void Test10()
+        {
+            // 字符流可直接通过 文件路径获取, 也可包装 字节流获取
+            StreamReader streamReader = new StreamReader("D:/eatMeal/JavaNB/IDEA/ideaProject/MyBatisDemo/data/mybatis.txt");
+            FileStream fileOutputStream = new FileStream("D:/eatMeal/CSharp/CSharpProject/CSharpStudy/fourthly/file/mybatis.txt", FileMode.Create, FileAccess.Write);
+            StreamWriter streamWriter = new StreamWriter(fileOutputStream);
+
+            // 没有出现乱码应该 字符流默认是UTF8, 我的文件也是UTF8
+            string lineTxt = null;
+            while((lineTxt = streamReader.ReadLine()) != null)// 确实读取到空行是"", 到文件末尾为null
+            {
+                Console.WriteLine(lineTxt);
+                streamWriter.WriteLine(lineTxt);
+            }
+
+            streamWriter.Close();
+            fileOutputStream.Close();
+            streamReader.Close();
+        }
+
+        /// <summary>
+        /// 字符流
+        /// 读取指定个数字符
+        /// </summary>
+        public void Test11()
+        {
+            StreamReader streamReader = new StreamReader("D:/eatMeal/JavaNB/IDEA/ideaProject/MyBatisPlusProject/pom.xml");
+            StreamWriter streamWriter = new StreamWriter("D:/eatMeal/CSharp/CSharpProject/CSharpStudy/fourthly/file/pom.xml");
+
+            int len = -1;
+            char[] tempChars = new char[1024];
+            while((len = streamReader.Read(tempChars, 0, 1024)) != 0)
+            {
+                streamWriter.Write(tempChars, 0, len);
+            }
+
+            streamWriter.Close();
+            streamReader.Close();
+        }
     }
 }

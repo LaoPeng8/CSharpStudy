@@ -1,0 +1,71 @@
+MyBatis.txt:
+    mybatis之前叫ibatis : 是apache的
+    2010 ibatis被谷歌接管了 -> google colde ,名字改为mybatis
+
+MyBatis可以简化JDBC操作,实现数据的持久化.
+    ORM:Object   Relational   Mapping
+              person对象 person表
+    ORM是个概念,
+    MyBatis是ORM的一个实现/还有其他实现:Hibernate JPA等...
+    orm可以使得开发人员 像操作对象一样 操作数据库的表.
+
+开发mybatis程序步骤
+1.配置mybatis
+    导入该导入的包,比如mybatis.jar 以及JDBC的包 mysql-connector-java.jar
+    src/conf.xml:配置数据库信息(url,username...) 和 需要加载的映射文件
+    一个实体类来对应数据库中的一张表
+    映射文件xxxMapper.xml: 增删改查等sql可以写在里面
+        比如查询的sql:
+            id:一个映射文件中有多个sql语言通过id来区分这些sql,当然映射文件可以也有多个通过mapper标签里的namespace="路径"来区分这些映射文件
+            resultType: select查询完的返回值是某个类.(包名.类名)
+            parameterType: sql参数的类型
+            <select id="queryPersonById" resultType="org.pjj.entity.Person" parameterType="int">
+                select * from person where id = #{id} //#{id} = ?
+            </select>
+    测试类:
+        session.selectOne("sql","sql的参数");//这里的sql通过调映射文件中的sql来用,映射文件的namespace.id
+
+复习第一个MyBatis程序:
+    0. 导入mybatis.jar, mysql驱动.jar
+    1. conf.xml (数据库配置信息、映射文件)
+    2. 表 - 类: 映射文件 xxxMapper.xml
+    3. 测试
+
+一、基础方式的增删改查CRUD:
+    就是先在src下配一个conf.xml里面写数据库环境,映射文件的路径,然后创建一个实体类对应一张表,然后在和实体类一个路径的地方写一个
+    实体类mapper.xml里面写一些sql,然后在需要用的地方,可以通过SqlSessionFactoryBuilder一步步获取到SqlSession,然后通过SqlSession
+    来调用增删改查的方法,然后通过资源文件的namespace.sql的id来获取相应的sql然后操作数据库.
+mybatis约定:
+    输入参数parameterType 和 resultType 在形式上都只能有一个
+
+如果输入参数: 是简单类型(8个基本类型+String) 则 可以使用任何占位符#{xxxx}
+                如果是对象类型,则必须是对象的属性#{属性名}
+
+输出参数: 如果返回值类型是一个对象(如Student),则无论返回一个、还是多个在resultType都写成org.pjj.entity.Student
+            即: resultType="org.pjj.entity.Student"
+
+注意事项:
+    a.如果使用的事务方式为JDBC,贼需要手动commit提交,即session.commit();
+    b.所有的标签<select><update>等.. 都必须有sql语句,但是sql参数可选
+
+二、mapper动态代理方式的crud (MyBatis接口开发) (两种称呼有人喜欢叫动态代理有人喜欢叫接口开发)
+原则: 约定优于配置
+
+硬编码方式:
+    在一个java文件里,通过比如setName("MyProject")方法给某个东西设置值,这种方式叫硬编码
+配置方式:
+    在一个xml文件里,通过比如<name>MyProject</name>这设置值,这种方式叫配置方式
+约定:
+    默认值就是MyProject,如果要改 可以通过硬编码或者配置方式来进行修改
+
+具体实现的步骤:
+1.基础环境: mybatis.jar、mysql驱动.jar、conf.xml、mapper.xml
+2.(不同之处):
+    约定的目标: 省略掉statement,即根据约定 直接定位出sql语句. //String statement就是调增删改查方法是的sql那个参数的名字 如:session.selectOne(statement, stuno);
+
+    以下步骤请看MyBatisDemo2.......
+
+
+
+
+
