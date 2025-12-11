@@ -56,5 +56,14 @@ Demo07 demo07 = new Demo07();
 //demo07.Test08();
 //demo07.Test09();
 //demo07.Test10();
-demo07.Test11();
+//demo07.Test11();
+
+/**
+ * Visual Studio 或者说C# 项目, 只能运行一个Main方法, 即Program.cs, 老师给出的方案是打开两个Visual Studio, 并且是俩个项目分别运行 Server, Client
+ * 我打开两个 Visual Studio 运行同一个项目的不同两个方法, 会提示某文件被占用...
+ * Debug目录下是已经编译的文件, 可以先执行 TestServer(); 后将编译后的文件复制放在其他地方, 后再执行TestClient()就不会冲突了, 不通过Visual Studio执行, 单独执行两个编译后的文件
+ */
+Demo08 demo08 = new Demo08();
+//demo08.TestServer();
+demo08.TestClient();
 
