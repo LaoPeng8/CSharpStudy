@@ -65,5 +65,7 @@ Demo07 demo07 = new Demo07();
  */
 Demo08 demo08 = new Demo08();
 //demo08.TestServer();
-demo08.TestClient();
+//demo08.TestClient();
+//demo08.TestUpdServer();
+//demo08.TestUpdClient();
 
