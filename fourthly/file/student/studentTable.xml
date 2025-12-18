@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<studentTable>
+	<student>
+		<id>1</id>
+		<name>张三</name>
+		<age>18</age>
+		<gender>1</gender>
+		<address>武汉市</address>
+	</student>
+	<student>
+		<id>2</id>
+		<name>李四</name>
+		<age>28</age>
+		<gender>1</gender>
+		<address>上海市</address>
+	</student>
+	<student>
+		<id>3</id>
+		<name>王五</name>
+		<age>38</age>
+		<gender>1</gender>
+		<address>广州市</address>
+	</student>
+	<student>
+		<id>5</id>
+		<name>赵六</name>
+		<age>12</age>
+		<gender>1</gender>
+		<address>深圳市</address>
+	</student>
+	<student>
+		<id>6</id>
+		<name>李华</name>
+		<age>9</age>
+		<gender>0</gender>
+		<address>北京市</address>
+	</student>
+</studentTable>

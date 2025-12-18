@@ -69,3 +69,8 @@ Demo08 demo08 = new Demo08();
 //demo08.TestUpdServer();
 //demo08.TestUpdClient();
 
+Demo09 demo09 = new Demo09();
+//demo09.Test01();
+//demo09.Test02();
+demo09.Test03();
+
