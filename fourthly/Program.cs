@@ -72,5 +72,22 @@ Demo08 demo08 = new Demo08();
 Demo09 demo09 = new Demo09();
 //demo09.Test01();
 //demo09.Test02();
-demo09.Test03();
+//demo09.Test03();
+//demo09.Test04();
+
+Demo10 demo10 = new Demo10();
+//demo10.Test01();
+//demo10.Test02();
+//demo10.Test03();
+//demo10.Test04();
+//demo10.Test05();
+//demo10.Test06();
+//demo10.Test07();
+//demo10.Test08();
+//demo10.Test09();
+//demo10.Test10();
+//demo10.Test11();
+demo10.Test12();
+
+
 

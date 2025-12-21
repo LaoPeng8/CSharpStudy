@@ -65,7 +65,7 @@ namespace fourthlySeason
         public override string? ToString()
         {
             string studentListString = string.Join(", ", studentList.Select(s => s.ToString()));
-            return $"{{ school: {school}, sutentList: [{studentListString}] }}";
+            return $"{{ school: {school}, sutentList: [{ studentListString}] }}";
         }
     }
 
@@ -178,7 +178,7 @@ namespace fourthlySeason
         }
 
         /// <summary>
-        /// json
+        /// json 反序列化
         /// </summary>
         /// <returns></returns>
         public Student3 Test03()
@@ -189,6 +189,26 @@ namespace fourthlySeason
             Console.WriteLine(student);
 
             return student;
+        }
+
+        /// <summary>
+        /// json 序列化
+        /// </summary>
+        /// <returns></returns>
+        public String Test04()
+        {
+            Student3 student = new Student3();
+            student.school = "希望三小";
+            student.studentList = new Student2[3];
+            student.studentList[0] = new Student2(1, "小二", 6, 1, "希望三小二班");
+            student.studentList[1] = new Student2(2, "小三", 7, 1, "希望三小二班");
+            student.studentList[2] = new Student2(3, "小四", 6, 0, "希望三小三班");
+
+            string studentJson = JsonConvert.SerializeObject(student);
+
+            Console.WriteLine(studentJson);
+
+            return studentJson;
         }
     }
 }
