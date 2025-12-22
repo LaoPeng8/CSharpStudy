@@ -4,6 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+/**
+ * 第三季 坦克大战
+ * https://www.bilibili.com/video/BV1kG41177Xx
+ */
 namespace thirdlySeasonTankBattle
 {
     internal static class Program

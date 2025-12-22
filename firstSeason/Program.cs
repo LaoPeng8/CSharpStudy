@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
+/**
+ * 第一季 基础语法
+ * https://www.bilibili.com/video/BV13V4y157FX
+ */
 namespace firstSeason
 {
     /**

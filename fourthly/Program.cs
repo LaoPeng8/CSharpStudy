@@ -1,4 +1,9 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿/**
+ * 第四季 高级篇(高级基础)(字符串常用方法, 正则, 委托, 匿名方法, Lambda, 反射, 特性, 多线程, 线程池, IO, Socekt, Xml, Json, Linq)
+ * https://www.bilibili.com/video/BV1GW4y1E7pd
+ */
+
+// See https://aka.ms/new-console-template for more information
 // 和正常的类一样是拥有 namespace 和 main方法的, 只是单一个打印不需要namespace 而main方法被省略了, 因为Program.cs是一个程序的入口
 //Console.WriteLine("Hello, World!");
 

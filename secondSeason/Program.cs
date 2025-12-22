@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
+/**
+ * 第二季 面向对象
+ * https://www.bilibili.com/video/BV1bg411a7c7
+ */
 namespace secondSeason
 {
     /**
