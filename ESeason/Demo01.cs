@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using System.Drawing;
+using Spire.Pdf;
+using Spire.Pdf.Graphics;
 
 namespace ESeason
 {
@@ -260,5 +263,69 @@ namespace ESeason
             thread.Join();
             Console.WriteLine("Done.");
         }
+
+        /// <summary>
+        /// 测试分割图片
+        /// </summary>
+        private Image[] GetImages(int num, string imagePath)
+        {
+            List<Image> list = new List<Image>();
+            Image image = Image.FromFile(imagePath);// 
+
+            int w = image.Width / num;
+            Bitmap bitmap = null;
+            for(int i = 0; i < num; i++)
+            {
+                bitmap = new Bitmap(w, image.Height);
+                using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(bitmap))
+                {
+                    g.Clear(Color.White);
+                    Rectangle rect = new Rectangle(i * w, 0, w, image.Height);
+                    g.DrawImage(image, new Rectangle(0, 0, bitmap.Width, bitmap.Height), rect, GraphicsUnit.Pixel);
+                }
+                list.Add(bitmap);
+            }
+
+            return list.ToArray();
+        }
+
+        /// <summary>
+        /// 测试 Spire.PDF 给PDF盖章
+        /// Spire.PDF for .NET 免费仅支持10张以内且有水印
+        /// 
+        /// iTextPdf Java和C#应该都有,明天可以测试一下
+        /// https://blog.csdn.net/running_snail_/article/details/53008578
+        /// https://blog.csdn.net/xiaobijia/article/details/80856757
+        /// </summary>
+        public void TestPdfSeal()
+        {
+            string sealImagePath = "C:\\Users\\PengJiaJun\\Desktop\\1766585375860.png";
+            string pdfPath = "C:\\Users\\PengJiaJun\\Desktop\\Centos7 安装 MySQL5.6.pdf";
+
+            PdfDocument pdfDocument = new PdfDocument();
+            pdfDocument.LoadFromFile(pdfPath);
+
+            PdfUnitConvertor convert = new PdfUnitConvertor();
+            PdfPageBase pageBase = null;
+
+            Image[] images = GetImages(pdfDocument.Pages.Count, sealImagePath);
+            float x = 0;
+            float y = 0;
+
+            for(int i = 0; i < pdfDocument.Pages.Count; i++)
+            {
+                pageBase = pdfDocument.Pages[i];
+                x = pageBase.Size.Width - convert.ConvertToPixels(images[i].Width, PdfGraphicsUnit.Point) - 40;
+                y = pageBase.Size.Height / 2;
+
+                pageBase.Canvas.SetTransparency(0.2f, 0.2f, PdfBlendMode.Normal);
+                pageBase.Canvas.DrawImage(PdfImage.FromImage(images[i]), new PointF(x, y));
+            }
+
+            pdfDocument.SaveToFile("C:\\Users\\PengJiaJun\\Desktop\\Centos7 安装 MySQL5.6.pdf-盖章后.pdf");
+            pdfDocument.Close();
+        }
+
+
     }
 }
