@@ -1,6 +1,10 @@
-# C# 多线程入门概念
+# .NET 多线程
 
-**什么是线程安全?**
+
+
+## C# 多线程入门概念
+
+**什么是线程安全**
 
 * 线程安全: 多个线程访问共享资源时, 对共享资源的访问不会导致数据不一致或不可预期的结果
 * 同步机制: 保证线程安全(互斥 就是加锁, 改并行为串行)
@@ -23,7 +27,7 @@
 
 
 
-# 线程Thread
+## 线程Thread
 
 **线程的创建**
 
@@ -55,5 +59,71 @@
 
 
 
-# 线程安全和同步机制 Thread-Safety
+## 线程安全和同步机制 Thread-Safety
+
+**原子操作**
+
+* 上文做过介绍, 不过多阐述
+
+
+
+**锁与信号量**
+
+* lock & Monitor
+* Mutex
+* Semaphore
+* WaitHandle
+  * ManualResetEvent
+  * AutoResetEvent
+
+* ReaderWriterLock
+
+
+
+**轻量型**
+
+* SemaphoreSlim
+* ManualResetEventSlim
+* ReaderWriterLockSlim
+
+
+
+**不要自己造轮子**
+
+* 线程安全的单例 Lazy
+* 线程安全的集合类型 `ConcurrentBag, ConcurrentStack, ConcurrentQuery, ConcurrentDictionary`
+* 阻塞集合 `BlockingCollection`
+* 通道 `Channel`
+* 原子操作 `Interlocked`
+* 周期任务`PeriodicTimer`
+
+
+
+
+
+# .NET 异步编程
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

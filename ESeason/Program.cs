@@ -14,4 +14,6 @@ Demo01 demo01 = new Demo01();
 //demo01.Test03_2();
 //demo01.Test03_3();
 //demo01.Test03_4();
-demo01.TestPdfSeal();
+//demo01.TestPdfSeal();
+//demo01.Test04_1();
+demo01.Test04_2();

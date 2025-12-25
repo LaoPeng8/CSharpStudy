@@ -327,5 +327,56 @@ namespace ESeason
         }
 
 
+        /// <summary>
+        /// 测试 Semaphore
+        /// </summary>
+        public void Test04_1()
+        {
+            int[] inputs = Enumerable.Range(1, 20).ToArray();
+            var sw = Stopwatch.StartNew();
+
+            // 数字转为并行流, 排序, 查询方法(Func输入一个int返回一个int, 耗时模拟业务操作), 转为数组
+            var outputs = inputs.AsParallel().AsOrdered().Select(HeavyJob).ToArray();
+
+            Console.WriteLine("Outputs:");
+            Console.WriteLine(string.Join(",", outputs));
+            Console.WriteLine($"Elapsed time: {sw.ElapsedMilliseconds}ms");// 956ms
+
+            // 耗时操作
+            int HeavyJob(int input)
+            {
+                Thread.Sleep(300);
+                return input;
+            }
+
+        }
+
+
+        /// <summary>
+        /// 测试 Semaphore
+        /// 感觉和Java的CountDownLatch有一点像, 但不一样
+        /// </summary>
+        public void Test04_2()
+        {
+            int[] inputs = Enumerable.Range(1, 20).ToArray();
+            var sw = Stopwatch.StartNew();
+            Semaphore semaphore = new Semaphore(3, 3);// 初始有3个空闲窗口, 最多有3个空闲窗口
+
+            var outputs = inputs.AsParallel().AsOrdered().Select(HeavyJob).ToArray();
+
+            Console.WriteLine("Outputs:");
+            Console.WriteLine(string.Join(",", outputs));
+            Console.WriteLine($"Elapsed time: {sw.ElapsedMilliseconds}ms");// 2154ms
+            semaphore.Dispose();
+
+            // 耗时操作
+            int HeavyJob(int input)
+            {
+                semaphore.WaitOne();// 等待获取一个窗口
+                Thread.Sleep(300);
+                semaphore.Release();// 用完了就要释放窗口, 否则窗口用完之后, 再次semaphore.WaitOne();时就会一直阻塞了, 就卡住了
+                return input * input;
+            }
+        }
     }
 }
